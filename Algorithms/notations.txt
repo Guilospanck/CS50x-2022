@@ -39,3 +39,26 @@ Example: We have an array [0, 1, 2, 3, 4, 5, 6], and we want to search for the 5
 - 5 is > than 3. Get middle of right half. Right half = [4, 5, 6] middle of right half = 5.
 - Found!
 
+==========================================================================
+Selection Sort algorithm: O(n²) Ω(n²) Θ(n²)
+for i from 0 to n-1:
+  find the smallest number in this range
+  swap it with the number at i (number[i])
+
+==========================================================================
+Bubble Sort algorithm: O(n²) Ω(n)
+repeat (n-1) times:
+  for i from 0 to (n-2):
+    if numbers[i] and numbers[i+1] out of order:
+      swap then
+  if no swaps:
+    quit
+
+==========================================================================
+Merge Sort algorithm: O(n log n) Ω(n log n) Θ(n log n)
+If only one number:
+  Quit
+Else:
+  Sort left half of numbers
+  Sort right half of numbers
+  Merge sorted halves
