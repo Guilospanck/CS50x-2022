@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <limits.h>
+#include <stdbool.h>
 
+// Prototypes
 void selectionSortAlgorithm(int numbers[], int arraySize);
+void bubbleSortAlgorithm(int numbers[], int arraySize, bool reversed);
 
 int main()
 {
@@ -9,7 +12,11 @@ int main()
   int arraySize = (int)((sizeof(numbers) / sizeof(numbers[0])));
 
   // Selection Sort
-  selectionSortAlgorithm(numbers, arraySize);
+  // selectionSortAlgorithm(numbers, arraySize);
+
+  // Bubble sort
+  bool reversed = false;
+  bubbleSortAlgorithm(numbers, arraySize, reversed);
 
   return 0;
 }
@@ -39,6 +46,55 @@ void selectionSortAlgorithm(int numbers[], int arraySize)
     indexOfSmallesNumber = 0;
   }
 
+  // Prints the sorted array!
+  for (int i = 0; i < arraySize; i++)
+  {
+    if (i == arraySize - 1)
+    {
+      printf("%d\n", numbers[i]);
+    }
+    else
+    {
+      printf("%d-", numbers[i]);
+    }
+  }
+}
+
+void bubbleSortAlgorithm(int numbers[], int arraySize, bool reversed)
+{
+
+  bool swapped = false;
+
+  for (int j = 0; j < arraySize; j++)
+  {
+    for (int i = 0; i < arraySize - 1; i++)
+    {
+      int firstPair = numbers[i];
+      int secondPair = numbers[i + 1];
+
+      if (firstPair > secondPair && !reversed)
+      {
+        // swap then
+        numbers[i] = secondPair;
+        numbers[i + 1] = firstPair;
+        swapped = true;
+      }
+      else if (firstPair < secondPair && reversed)
+      {
+        // swap then
+        numbers[i] = secondPair;
+        numbers[i + 1] = firstPair;
+        swapped = true;
+      }
+    }
+
+    if (!swapped)
+    {
+      break;
+    }
+  }
+
+  // Prints the sorted array!
   for (int i = 0; i < arraySize; i++)
   {
     if (i == arraySize - 1)
