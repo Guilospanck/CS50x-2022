@@ -1,11 +1,7 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdbool.h>
-
-void linearSearch(int number);
-void binarySearch(int number);
-int getMiddle(int length);
-void recursiveBinarySearch(int numbers[], int middle, int number, int numbersLength);
+#include "numbers.h"
 
 int main(void)
 {
