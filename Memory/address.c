@@ -19,4 +19,14 @@ int main(void) {
   printf("%p\n", &s[1]);
   printf("%p\n", &s[2]);
   printf("%p\n", pointer);
+
+  // Defining custom types
+  typedef char *string; // now string is going to be a pointer to the beginning of a char
+
+  string name = "hey!";
+  printf("%s\n", name);
+  printf("%p\n", name); // name, which is a pointer, points to the same address of &name[0]
+  printf("%p\n", &name[0]);
+  printf("%p\n", &name[1]);
+  printf("%p\n", &name[2]);
 }
