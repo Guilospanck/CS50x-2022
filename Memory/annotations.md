@@ -50,3 +50,33 @@ equals to
 
 char *s = "Hi!";
 </code>
+
+## Array
+It's the same thing as above (because a string is an array of char).
+
+You can do `Pointer arithmetic` just moving bytes. We know that `1 char equals to 1 byte`,` so when we move something like:
+
+<code>
+char *s = "Hi!";
+
+printf("%c\n", *s);
+
+printf("%c\n", *(s + 1));
+</code>
+
+We're moving 1 byte per time, and then getting the next char.
+
+But we also know that usually `1 integer equals 4 bytes`. If we do the same for an array of integers, would it just move 1 byte?
+
+The fortunate thing is NO, because the compiler know how many bytes a type needs, so it's going to move that necessary amount.
+
+Each `pointer arithmetic` for this array of integers will move 4 bytes and we don't even have to say it to the compiler.
+
+E.g.:
+<code>
+int numbers[] = {1, 2, 3};
+
+printf("%i\n", *numbers); // will print 1
+
+printf("%i\n", *(numbers + 1)); // will print 2
+</code>

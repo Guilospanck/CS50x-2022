@@ -20,7 +20,7 @@ int main() {
 
   printf("\nNUMBERS \n");
 
-  // using the same thing to numbers
+  // using the same thing to numbers (because what's important is that it's an ARRAY)
   int numbers[] = {4, 6, 8, 9, 7, 2};
 
   printf("%i\n", numbers[0]);
