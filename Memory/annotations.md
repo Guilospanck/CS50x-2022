@@ -91,3 +91,13 @@ sudo apt get valgrind
 ```bash
 valgrind ./file
 ```
+
+## Heap Memory
+It consists of dynamic memory allocation.
+Heap it's the memory allocated that was explicitly requested. 
+Allocation and deallocation is done manually by the programmer or the GB.
+
+## Stack
+It's a special area of the computer memory where it stores temporary variables
+created by a function. When the computing task is completed, the memory of the variable
+will be automatically erased. It consists of methods, local variables and reference variables.
