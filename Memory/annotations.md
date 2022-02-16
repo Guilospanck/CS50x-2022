@@ -80,3 +80,14 @@ printf("%i\n", *numbers); // will print 1
 
 printf("%i\n", *(numbers + 1)); // will print 2
 </code>
+
+## Valgrind
+Valgrind it's a memory error checker. It verifies for memory leaks and memory allocation.
+
+To install it:
+```bash
+sudo apt get valgrind
+```
+```bash
+valgrind ./file
+```

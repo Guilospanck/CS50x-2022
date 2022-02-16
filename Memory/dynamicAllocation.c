@@ -8,6 +8,8 @@ int main(void)
 {
 
   char *s = "hi!";
+
+  // allocates memory
   char *t = malloc(strlen(s) + 1); // length of the string plus one for the "\0" (trailing null character)
   if (t == NULL)
   {
