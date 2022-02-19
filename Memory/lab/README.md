@@ -33,7 +33,11 @@ Then you get the average value of each color of each pixel and apply it to the c
 
 For example:
 
-[image]
+<div align="center">
+  
+  ![image](https://user-images.githubusercontent.com/22435398/154797283-379c0671-ce09-4502-80c2-14822c40951d.png)
+  
+</div>
 
 Based on the image above, if we get to blur the pixel 6, you would do the following:
 - Get RGB values of those pixels forming a 3x3 box around pixel 6, which are: 1, 2, 3, 5, 6, 7, 9, 10, 11 (notice how the 6 is also included).
@@ -51,7 +55,11 @@ One way of getting edges out of an image is by using the [Sobel Operator](https:
 ### Sobel Operator
 You have those two 3x3 matrixes (kernels):
 
-[image]
+<div align="center">
+  
+  ![image](https://user-images.githubusercontent.com/22435398/154797317-134c8a83-8dbc-4932-9626-48501122a05f.png)
+  
+</div>
 
 Then we'll get the 3x3 box around a pixel (like we did with the blur filter) and, for each color (R, G and B) we will multiply its value for the Gx matrix and then for the Gy matrix.
 
@@ -59,29 +67,41 @@ Example:
 
 Supposing we have those values of the channel R for the pixels around the pixel 6 (as in the blur filter):
 
+<div align="center">
+  
 |25 27 46|
 
 |44 200 99|
 
 |77 73 65|
+  
+</div>
 
 In this example, the value of the channel R of the pixel 6 is 200.
 
 Now we apply each value for its corresponding Gx and Gy.
+
+<div align="center">
 
 |25*(-1) 27*(0) 46*(1)|
 
 |44*(-2) 200*(0) 99*(2)|
 
 |77*(-1) 73*(0) 65*(1)|
+  
+</div>
 
 Resulting in:
+
+<div align="center">
 
 |-25 0 46|
 
 |-88 0 198|
 
 |-77 0 65|
+  
+</div>
 
 Summing up those values, we get:
 ```
