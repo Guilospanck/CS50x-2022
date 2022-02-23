@@ -55,7 +55,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
   {
     for (int column = 0; column < width; column++)
     {
-      _getNeighborhood(row, column, copy);
+      _getNeighborhood(row, column, height, width, copy, image);
     }
   }
   return;
@@ -67,7 +67,7 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
   return;
 }
 
-void _getNeighborhood(int row, int column, RGBTRIPLE copy[height][width])
+void _getNeighborhood(int row, int column, int height, int width, RGBTRIPLE copy[height][width], RGBTRIPLE image[height][width])
 {
   int topX = column;
   int topY = row - 1;
@@ -95,18 +95,21 @@ void _getNeighborhood(int row, int column, RGBTRIPLE copy[height][width])
 
   // elements of those lines
   RGBTRIPLE elements[9];
-  _setElement(leftTopDiagX, leftTopDiagY, 0, elements, copy);
-  _setElement(topX, topY, 1, elements, copy);
-  _setElement(rightTopDiagX, rightTopDiagY, 2, elements, copy);
-  _setElement(leftX, leftY, 3, elements, copy);
-  _setElement(column, row, 4, elements, copy);
-  _setElement(rightX, rightY, 5, elements, copy);
-  _setElement(leftBottomDiagX, leftBottomDiagY, 6, elements, copy);
-  _setElement(bottomX, bottomY, 7, elements, copy);
-  _setElement(rightBottomDiagX, rightBottomDiagY, 8, elements, copy);
+  _setElement(leftTopDiagX, leftTopDiagY, 0, height, width, elements, copy);
+  _setElement(topX, topY, 1, height, width, elements, copy);
+  _setElement(rightTopDiagX, rightTopDiagY, 2, height, width, elements, copy);
+  _setElement(leftX, leftY, 3, height, width, elements, copy);
+  _setElement(column, row, 4, height, width, elements, copy);
+  _setElement(rightX, rightY, 5, height, width, elements, copy);
+  _setElement(leftBottomDiagX, leftBottomDiagY, 6, height, width, elements, copy);
+  _setElement(bottomX, bottomY, 7, height, width, elements, copy);
+  _setElement(rightBottomDiagX, rightBottomDiagY, 8, height, width, elements, copy);
+
+  // set Medium value to central pixel
+  _calculateMediumRGBValues(elements, height, width, image, row, column);
 }
 
-void _setElement(int xIdx, int yIdx, int elemIdx, RGBTRIPLE elements[9], RGBTRIPLE copy[height][width])
+void _setElement(int xIdx, int yIdx, int elemIdx, int height, int width, RGBTRIPLE elements[9], RGBTRIPLE copy[height][width])
 {
   if (xIdx < 0 || yIdx < 0)
   {
@@ -116,28 +119,34 @@ void _setElement(int xIdx, int yIdx, int elemIdx, RGBTRIPLE elements[9], RGBTRIP
     el.rgbtRed = 0;
 
     elements[elemIdx] = el;
-  } else {
+  }
+  else
+  {
     RGBTRIPLE el;
-    el.rgbtBlue = copy[yIdx][xIdx].rgtBlue;
-    el.rgbtGreen = copy[yIdx][xIdx].rgtGreen;
-    el.rgbtRed = copy[yIdx][xIdx].rgtRed;
+    el.rgbtBlue = copy[yIdx][xIdx].rgbtBlue;
+    el.rgbtGreen = copy[yIdx][xIdx].rgbtGreen;
+    el.rgbtRed = copy[yIdx][xIdx].rgbtRed;
+
+    elements[elemIdx] = el;
   }
 }
 
-void _calculateMediumRGBValues(RGBTRIPLE elements[9], RGBTRIPLE image[height][width], int row, int column){
+void _calculateMediumRGBValues(RGBTRIPLE elements[9], int height, int width, RGBTRIPLE image[height][width], int row, int column)
+{
   int rValues = 0;
   int gValues = 0;
   int bValues = 0;
 
-  for(int i = 0; i < 9; i++){
+  for (int i = 0; i < 9; i++)
+  {
     rValues += elements[i].rgbtRed;
     gValues += elements[i].rgbtGreen;
-    bValues += elements[i].rgbtBlues;
+    bValues += elements[i].rgbtBlue;
   }
 
-  int rMedium = floor(rValues/9);
-  int gMedium = floor(gValues/9);
-  int bMedium = floor(bValues/9);
+  int rMedium = floor(rValues / 9);
+  int gMedium = floor(gValues / 9);
+  int bMedium = floor(bValues / 9);
 
   RGBTRIPLE el;
   el.rgbtBlue = bMedium;
@@ -145,5 +154,4 @@ void _calculateMediumRGBValues(RGBTRIPLE elements[9], RGBTRIPLE image[height][wi
   el.rgbtRed = rMedium;
 
   image[row][column] = el;
-
 }
