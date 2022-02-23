@@ -55,7 +55,7 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
   {
     for (int column = 0; column < width; column++)
     {
-      _getNeighborhood(row, column, height, width, copy, image);
+      _applyBlurFilter(row, column, height, width, copy, image);
     }
   }
   return;
@@ -67,46 +67,79 @@ void edges(int height, int width, RGBTRIPLE image[height][width])
   return;
 }
 
-void _getNeighborhood(int row, int column, int height, int width, RGBTRIPLE copy[height][width], RGBTRIPLE image[height][width])
+void _applyBlurFilter(int row, int column, int height, int width, RGBTRIPLE copy[height][width], RGBTRIPLE image[height][width])
 {
-  int topX = column;
-  int topY = row - 1;
 
-  int bottomX = column;
-  int bottomY = row + 1;
-
-  int leftX = column - 1;
-  int leftY = row;
-
-  int rightX = column + 1;
-  int rightY = row;
-
-  int leftTopDiagX = column - 1;
-  int leftTopDiagY = row - 1;
-
-  int rightTopDiagX = column + 1;
-  int rightTopDiagY = row + 1;
-
-  int leftBottomDiagX = column - 1;
-  int leftBottomDiagY = row + 1;
-
-  int rightBottomDiagX = column + 1;
-  int rightBottomDiagY = row + 1;
+  // get neighborhood
+  Neighbors neighbor = _getNeighborhood(row, column);
 
   // elements of those lines
   RGBTRIPLE elements[9];
-  _setElement(leftTopDiagX, leftTopDiagY, 0, height, width, elements, copy);
-  _setElement(topX, topY, 1, height, width, elements, copy);
-  _setElement(rightTopDiagX, rightTopDiagY, 2, height, width, elements, copy);
-  _setElement(leftX, leftY, 3, height, width, elements, copy);
-  _setElement(column, row, 4, height, width, elements, copy);
-  _setElement(rightX, rightY, 5, height, width, elements, copy);
-  _setElement(leftBottomDiagX, leftBottomDiagY, 6, height, width, elements, copy);
-  _setElement(bottomX, bottomY, 7, height, width, elements, copy);
-  _setElement(rightBottomDiagX, rightBottomDiagY, 8, height, width, elements, copy);
+  _setElement(neighbor.leftTopDiagX, neighbor.leftTopDiagY, 0, height, width, elements, copy);
+  _setElement(neighbor.topX, neighbor.topY, 1, height, width, elements, copy);
+  _setElement(neighbor.rightTopDiagX, neighbor.rightTopDiagY, 2, height, width, elements, copy);
+  _setElement(neighbor.leftX, neighbor.leftY, 3, height, width, elements, copy);
+  _setElement(neighbor.centerX, neighbor.centerY, 4, height, width, elements, copy);
+  _setElement(neighbor.rightX, neighbor.rightY, 5, height, width, elements, copy);
+  _setElement(neighbor.leftBottomDiagX, neighbor.leftBottomDiagY, 6, height, width, elements, copy);
+  _setElement(neighbor.bottomX, neighbor.bottomY, 7, height, width, elements, copy);
+  _setElement(neighbor.rightBottomDiagX, neighbor.rightBottomDiagY, 8, height, width, elements, copy);
 
   // set Medium value to central pixel
   _calculateMediumRGBValues(elements, height, width, image, row, column);
+}
+
+Neighbors _getNeighborhood(int row, int column)
+{
+  Neighbors n;
+
+  // Get neighborhood
+  int topX = column;
+  int topY = row - 1;
+  n.topX = topX;
+  n.topY = topY;
+
+  int bottomX = column;
+  int bottomY = row + 1;
+  n.bottomX = bottomX;
+  n.bottomY = bottomY;
+
+  int leftX = column - 1;
+  int leftY = row;
+  n.leftX = leftX;
+  n.leftY = leftY;
+
+  int rightX = column + 1;
+  int rightY = row;
+  n.rightX = rightX;
+  n.rightY = rightY;
+
+  int leftTopDiagX = column - 1;
+  int leftTopDiagY = row - 1;
+  n.leftTopDiagX = leftTopDiagX;
+  n.leftTopDiagY = leftTopDiagY;
+
+  int rightTopDiagX = column + 1;
+  int rightTopDiagY = row + 1;
+  n.rightTopDiagX = rightTopDiagX;
+  n.rightTopDiagY = rightTopDiagY;
+
+  int leftBottomDiagX = column - 1;
+  int leftBottomDiagY = row + 1;
+  n.leftBottomDiagX = leftBottomDiagX;
+  n.leftBottomDiagY = leftBottomDiagY;
+
+  int rightBottomDiagX = column + 1;
+  int rightBottomDiagY = row + 1;
+  n.rightBottomDiagX = rightBottomDiagX;
+  n.rightBottomDiagY = rightBottomDiagY;
+
+  int centerX = column;
+  int centerY = row;
+  n.centerX = centerX;
+  n.centerY = centerY;
+
+  return n;
 }
 
 void _setElement(int xIdx, int yIdx, int elemIdx, int height, int width, RGBTRIPLE elements[9], RGBTRIPLE copy[height][width])
