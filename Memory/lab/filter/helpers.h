@@ -25,7 +25,16 @@ typedef struct
   int rightBottomDiagX, rightBottomDiagY;
 } Neighbors;
 
+typedef struct
+{
+  int gxMatrix[9];
+  int gyMatrix[9];
+} SobelMatrixes;
+
 void _applyBlurFilter(int row, int column, int height, int width, RGBTRIPLE copy[height][width], RGBTRIPLE image[height][width]);
+void _applyEdgeFilter(int row, int column, int height, int width, RGBTRIPLE copy[height][width], RGBTRIPLE image[height][width]);
 void _setElement(int xIdx, int yIdx, int elemIdx, int height, int width, RGBTRIPLE elements[9], RGBTRIPLE copy[height][width]);
 void _calculateMediumRGBValues(RGBTRIPLE elements[9], int height, int width, RGBTRIPLE image[height][width], int row, int column);
+void _calculateGxGyValues(RGBTRIPLE elements[9], int height, int width, RGBTRIPLE image[height][width], int row, int column);
+SobelMatrixes _getSobelMatrixes();
 Neighbors _getNeighborhood(int row, int column);

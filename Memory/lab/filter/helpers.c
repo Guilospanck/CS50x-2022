@@ -64,6 +64,16 @@ void blur(int height, int width, RGBTRIPLE image[height][width])
 // Detect edges
 void edges(int height, int width, RGBTRIPLE image[height][width])
 {
+  RGBTRIPLE copy[height][width];
+  memcpy(copy, image, height * width * sizeof(RGBTRIPLE));
+
+  for (int row = 0; row < height; row++)
+  {
+    for (int column = 0; column < width; column++)
+    {
+      _applyEdgeFilter(row, column, height, width, copy, image);
+    }
+  }
   return;
 }
 
@@ -87,6 +97,27 @@ void _applyBlurFilter(int row, int column, int height, int width, RGBTRIPLE copy
 
   // set Medium value to central pixel
   _calculateMediumRGBValues(elements, height, width, image, row, column);
+}
+
+void _applyEdgeFilter(int row, int column, int height, int width, RGBTRIPLE copy[height][width], RGBTRIPLE image[height][width])
+{
+  // get neighborhood
+  Neighbors neighbor = _getNeighborhood(row, column);
+
+  // elements of those lines
+  RGBTRIPLE elements[9];
+  _setElement(neighbor.leftTopDiagX, neighbor.leftTopDiagY, 0, height, width, elements, copy);
+  _setElement(neighbor.topX, neighbor.topY, 1, height, width, elements, copy);
+  _setElement(neighbor.rightTopDiagX, neighbor.rightTopDiagY, 2, height, width, elements, copy);
+  _setElement(neighbor.leftX, neighbor.leftY, 3, height, width, elements, copy);
+  _setElement(neighbor.centerX, neighbor.centerY, 4, height, width, elements, copy);
+  _setElement(neighbor.rightX, neighbor.rightY, 5, height, width, elements, copy);
+  _setElement(neighbor.leftBottomDiagX, neighbor.leftBottomDiagY, 6, height, width, elements, copy);
+  _setElement(neighbor.bottomX, neighbor.bottomY, 7, height, width, elements, copy);
+  _setElement(neighbor.rightBottomDiagX, neighbor.rightBottomDiagY, 8, height, width, elements, copy);
+
+  // calculate Gx and Gy
+  _calculateGxGyValues(elements, height, width, image, row, column);
 }
 
 Neighbors _getNeighborhood(int row, int column)
@@ -187,4 +218,85 @@ void _calculateMediumRGBValues(RGBTRIPLE elements[9], int height, int width, RGB
   el.rgbtRed = rMedium;
 
   image[row][column] = el;
+}
+
+void _calculateGxGyValues(RGBTRIPLE elements[9], int height, int width, RGBTRIPLE image[height][width], int row, int column)
+{
+  int rxValues = 0;
+  int ryValues = 0;
+  int gxValues = 0;
+  int gyValues = 0;
+  int bxValues = 0;
+  int byValues = 0;
+
+  // get Sobel Matrixes
+  SobelMatrixes sb;
+  sb = _getSobelMatrixes();
+
+  for (int i = 0; i < 9; i++)
+  {
+    rxValues += elements[i].rgbtRed * sb.gxMatrix[i];
+    gxValues += elements[i].rgbtGreen * sb.gxMatrix[i];
+    bxValues += elements[i].rgbtBlue * sb.gxMatrix[i];
+
+    ryValues += elements[i].rgbtRed * sb.gyMatrix[i];
+    gyValues += elements[i].rgbtGreen * sb.gyMatrix[i];
+    byValues += elements[i].rgbtBlue * sb.gyMatrix[i];
+  }
+
+  int rAfterSobel = rxValues ^ 2 + ryValues ^ 2;
+  int gAfterSobel = gxValues ^ 2 + gyValues ^ 2;
+  int bAfterSobel = bxValues ^ 2 + byValues ^ 2;
+
+  int rEdge = sqrt(rAfterSobel);
+  if (rEdge > 255)
+  {
+    rEdge = 255;
+  }
+
+  int gEdge = sqrt(gAfterSobel);
+  if (gEdge > 255)
+  {
+    gEdge = 255;
+  }
+
+  int bEdge = sqrt(bAfterSobel);
+  if (bEdge > 255)
+  {
+    bEdge = 255;
+  }
+
+  RGBTRIPLE el;
+  el.rgbtBlue = bEdge;
+  el.rgbtGreen = gEdge;
+  el.rgbtRed = rEdge;
+
+  image[row][column] = el;
+}
+
+SobelMatrixes _getSobelMatrixes()
+{
+  SobelMatrixes sb;
+
+  sb.gxMatrix[0] = -1;
+  sb.gxMatrix[1] = 0;
+  sb.gxMatrix[2] = 1;
+  sb.gxMatrix[3] = -2;
+  sb.gxMatrix[4] = 0;
+  sb.gxMatrix[5] = 2;
+  sb.gxMatrix[6] = -1;
+  sb.gxMatrix[7] = 0;
+  sb.gxMatrix[8] = 1;
+
+  sb.gyMatrix[0] = -1;
+  sb.gyMatrix[1] = -2;
+  sb.gyMatrix[2] = -1;
+  sb.gyMatrix[3] = 0;
+  sb.gyMatrix[4] = 0;
+  sb.gyMatrix[5] = 0;
+  sb.gyMatrix[6] = 1;
+  sb.gyMatrix[7] = 2;
+  sb.gyMatrix[8] = 1;
+
+  return sb;
 }

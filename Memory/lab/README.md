@@ -113,7 +113,7 @@ Now we do the same process, but using the Gy kernel.
 ```
 -25+(-54)+(-46)+0+0+0+77+146+65 = 163
 ```
-Therefore, we have that the Gy of the channel R of the pixel 6 is 119.
+Therefore, we have that the Gy of the channel R of the pixel 6 is 163.
 
 These values of Gx and Gy gets the gradient of color of the image. Using the kernels stated in the image above, if we get for Gx a very large positive or negative number, that means that the image has a change of color in that direction (right -> positive, left -> negative) which means a probability of edge.
 
