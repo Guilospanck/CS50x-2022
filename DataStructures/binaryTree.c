@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdbool.h>
 
 typedef struct node
 {
@@ -10,6 +11,7 @@ typedef struct node
 
 void print_tree(node *root);
 void free_tree(node *root);
+bool search(node *root, int number);
 
 int main(void)
 {
@@ -58,6 +60,16 @@ int main(void)
   list->node_right = n;
 
   print_tree(list);
+  int number = 3;
+  bool numberExist = search(list, number);
+  if (numberExist)
+  {
+    printf("Number %i exists!\n", number);
+  }
+  else
+  {
+    printf("Number %i doesn't exist!\n", number);
+  }
   free_tree(list);
 
   return 0;
@@ -85,4 +97,24 @@ void free_tree(node *root)
   free_tree(root->node_left);
   free_tree(root->node_right);
   free(root);
+}
+
+bool search(node *root, int number)
+{
+  if (root == NULL)
+  {
+    return false;
+  }
+
+  if (number > root->number)
+  {
+    return search(root->node_right, number);
+  }
+
+  if (number < root->number)
+  {
+    return search(root->node_left, number);
+  }
+
+  return true;
 }
